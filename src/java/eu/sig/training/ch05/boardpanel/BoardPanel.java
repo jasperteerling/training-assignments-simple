@@ -9,7 +9,7 @@ public class BoardPanel {
     /**
      * Renders a single square on the given graphics context on the specified
      * rectangle.
-     * 
+     *
      * @param square
      *            The square to render.
      * @param g
@@ -23,17 +23,18 @@ public class BoardPanel {
      * @param h
      *            The height of this square (in pixels).
      */
-    private void render(Square square, Graphics g, int x, int y, int w, int h) {
-        square.getSprite().draw(g, x, y, w, h);
+    private void render(Square square, Graphics g, Draw draw) {
+        square.getSprite().draw(g, new Draw(draw.getX(), draw.getY(), draw.getW(), draw.getH()));
         for (Unit unit : square.getOccupants()) {
-            unit.getSprite().draw(g, x, y, w, h);
+            unit.getSprite().draw(g, new Draw(draw.getX(), draw.getY(), draw.getW(), draw.getH()));
         }
     }
+
     // end::render[]
 
     private class Sprite {
         @SuppressWarnings("unused")
-        public void draw(Graphics g, int x, int y, int w, int h) {
+        public void draw(Graphics g, Draw draw) {
 
         }
     }
