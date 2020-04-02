@@ -1,9 +1,7 @@
 package eu.sig.training.ch04;
 
 // tag::CheckingAccount[]
-public class CheckingAccount {
-    private static final float INTEREST_PERCENTAGE = 0.01f;
-    private Money balance = new Money();
+public class CheckingAccount extends Accounts {
     private int transferLimit = 100;
 
     public Transfer makeTransfer(String counterAccount, Money amount)
@@ -13,12 +11,12 @@ public class CheckingAccount {
             throw new BusinessException("Limit exceeded!");
         }
         // 2. Assuming result is 9-digit bank account number, validate 11-test:
+        elevenTest(counterAccount);
         int sum = 0;
-        for (int i = 0; i < counterAccount.length(); i++) {
-            char character = counterAccount.charAt(i);
-            int characterValue = Character.getNumericValue(character);
-            sum = sum + (9 - i) * characterValue;
-        }
+        return checkAccountAndMakeTransfer(counterAccount, amount, sum);
+    }
+
+    private Transfer checkAccountAndMakeTransfer(String counterAccount, Money amount, int sum) throws BusinessException {
         if (sum % 11 == 0) {
             // 3. Look up counter account and make transfer object:
             CheckingAccount acct = Accounts.findAcctByNumber(counterAccount);
@@ -26,15 +24,6 @@ public class CheckingAccount {
             return result;
         } else {
             throw new BusinessException("Invalid account number!");
-        }
-    }
-
-    public void addInterest() {
-        Money interest = balance.multiply(INTEREST_PERCENTAGE);
-        if (interest.greaterThan(0)) {
-            balance.add(interest);
-        } else {
-            balance.substract(interest);
         }
     }
 }
